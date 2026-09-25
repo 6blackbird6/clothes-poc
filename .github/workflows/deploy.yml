@@ -1,0 +1,27 @@
+name: CI-CD Pipeline Clothes4Happiness
+
+# Define que o fluxo será disparado sempre que houver um push na branch main
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Passo 1: Baixa o código do repositório para o servidor de execução do GitHub
+    - name: Copiar código para o runner
+      uses: actions/checkout@v3
+
+    # Passo 2: Configura o Docker Buildx (ferramenta para criar imagens Docker)
+    - name: Configurar Docker Build
+      uses: docker/setup-buildx-action@v2
+
+    # Passo 3: Faz o build (construção) da imagem Docker para testar se tudo compila corretamente
+    - name: Construir a imagem Docker da aplicação
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false # Como é uma POC básica simulada, não precisamos enviar para um Docker Hub externo
+        tags: clothes-app:latest
